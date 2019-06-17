@@ -8,16 +8,37 @@
         {
             background-color: #485864;
             text-align: center;
+            
         }
+        #header_list
+        {
+            background-color: #485864;
+            text-align: center;
+        }
+        #authors
+        {
+            background-color: #485864;
+            text-align:inherit;
+            margin-right: 25%;
+        }
+      
     </style>
     <header id="header">
+            <ul id="header_list">
+                    <li id="authors">
+                            <h4>
+                                <p><b>Authors:</b> Guy Schlesinger - 207232885 
+                                <br/>& Jonathan Shaya - 318530706
+                            </h4></li>
+                    <li><a><img src="source/logo.jpg" width= "400" height="125" id="logo"></a></li>
+                    
+        
+            </ul>
 
-        <img src="source/pacman_logo.jpg" width="200" height="50">
+        
 
 
-        <h4>
-            <p><b>Authors:</b> Guy Schlesinger - 207232885 & Jonathan Shaya - 318530706
-        </h4>
+        
     </header>
     <script src="javascript/jquery-3.4.0.min.js"></script>
     <script src="javascript/jquery.validate.js"></script>
@@ -80,7 +101,7 @@
             menu_go_to.style.backgroundColor = select_color;
 
 
-            document.body.style.backgroundImage = "url('source/background.jpg')";
+            document.body.style.backgroundImage = "url('source/background.jpeg')";
             if(section_name === "game")
             {
                 document.body.style.backgroundImage = "url('source/background_game.jpg')";
@@ -106,6 +127,14 @@
 
                             document.body.style.backgroundImage = "url('source/settings_background.jpg')";
                         }
+                        else
+                        {
+                            if(section_name === "about")
+                            {
+                                document.body.style.backgroundImage = "url('source/background_game.jpg')";
+                            
+                            }
+                        }
                     }
                 }
             }
@@ -115,8 +144,8 @@
         function Initialize()
         {
 
-            today = new Date().toISOString().substr(0,10);
-            document.getElementById('birthDate_signup').value = today;
+            //today = new Date().toISOString().substr(0,10);
+          //  document.getElementById('birthDate_signup').value = today;
 
             document.getElementById('start_setting_btn').disabled = true;
             //Set the default keys
@@ -138,7 +167,7 @@
             fakeUser.firstName = "a";
             fakeUser.email = "a";
             fakeUser.lastname = "a";
-            fakeUser.birthdate = today;
+            //fakeUser.birthdate = today;
             usersArr.push(fakeUser);
 
 
@@ -159,7 +188,7 @@
 
 <style>
     #body {
-        background: url('source/background.jpg') no-repeat center center fixed;
+        background: url('source/background.jpeg') no-repeat center center fixed;
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
@@ -245,6 +274,10 @@
 
 
         }
+        .sign_up_labels
+        {
+            color: black;
+        }
         .inptUser
         {
             position: relative;
@@ -253,57 +286,142 @@
             margin-right: 15px;
             width: 100%;
         }
+        .inptUser_signup
+        {
+            position: relative;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            margin-right: 15px;
+            width: 12%;
+        }
         #div_signup
         {
             position:fixed;
+            height: fit-content;
+            
             top: 25%;
             left: 30%;
+            
         }
         .errorMessages
         {
             color: red;
         }
-        .sign_up_labels
+      
+        .sign_up_labels_signup
         {
             color: black;
+            text-align: center;
+            font-weight: bold;
+            
         }
         #sign_up_headline
         {
             color:black;
         }
+        #sign_up_div
+        {
+            width:100%;
+            text-align: center
+        }
+        #username_signup
+        {
+            margin-left:6.5px ;
+        }
+        #email_signup
+        {
+            margin-left:33px ;
+        }
+        #country_signup
+        {
+            margin-left:19px ;
+            width: 10%; 
+        }
+        
+        #city_lbl
+        {
+            margin-left: 84px;
+        }
+        #city_signup
+        {
+            margin-left:44px;
+        }
+        #password_lbl
+        {
+            margin-left: 42px;
+        }
+        #password_signup
+        {
+            margin-left:9px;
+        }
+        #submit_btn
+        {
+            
+            width:42%;
+        }
+        #answer_lbl
+        {
+            margin-left: 42px;
+            
+        }
+        
+        #lastName_lbl
+        {
+            margin-left: 42px;
+        }
+       
+      
     </style>
-    <div class="userdiv" id ="div_signup">
-        <h1 id = "sign_up_headline">Sign Up:</h1>
+    
+         
+    <div  id="sign_up_div"> 
+        <h1 id = "sign_up_headline">Sign Up</h1>
         <form id="sign_up_form">
-            <label for="username_signup" class="sign_up_labels">Username</label>
+            
+            
+            <label id="username_lbl" for="username_signup" class="sign_up_labels_signup">Username</label>
+            <input class="inptUser_signup" type="text" id="username_signup" placeholder="Username" name="username">
+            <label for="password_signup" class="sign_up_labels_signup" id="password_lbl">Password</label>
+            <input class="inptUser_signup" type="password" id="password_signup" placeholder="Password" name="password">
             <br/>
-            <input class="inptUser" type="text" id="username_signup" placeholder="Username" name="username">
+            <label for="firstName_signup" class="sign_up_labels_signup">First Name</label>
+            <input class="inptUser_signup" type="text" id="firstName_signup" placeholder="First Name" name="fName">
+            <label for="lastName_signup"  id="lastName_lbl" class="sign_up_labels_signup">Last Name</label>
+            <input class="inptUser_signup" type="text" id="lastName_signup" placeholder="Last Name" name="lName">
             <br/>
-            <label for="password_signup" class="sign_up_labels">Password</label>
+      
+            <label for="country_signup" class="sign_up_labels_signup" id="country_lbl">Country</label>
+            <select name="Country" id="country_signup" form="carform" class="inptUser_signup">
+               <option>Select Country</option>
+            </select>
+            <label for="city_signup" class="sign_up_labels_signup" id="city_lbl">City</label>
+            <input class="inptUser_signup" type="text" id="city_signup" text-align ="center" name="city">
             <br/>
-            <input class="inptUser" type="password" id="password_signup" placeholder="Password" name="password">
+            <label for="question" class="sign_up_labels_signup" id="question_lbl">Question</label>
+            <input class="inptUser_signup" type="text" id="question_signup" text-align ="center" name="question">
+            <label for="answer" class="sign_up_labels_signup" id="answer_lbl">Answer</label>
+            <input class="inptUser_signup" type="text" id="answer_signup" text-align ="center" name="answer">
             <br/>
-            <label for="firstName_signup" class="sign_up_labels">First Name</label>
-            <br/>
-            <input class="inptUser" type="text" id="firstName_signup" placeholder="First Name" name="fName">
-            <br/>
-            <label for="lastName_signup" class="sign_up_labels">Last Name</label>
-            <br/>
-            <input class="inptUser" type="text" id="lastName_signup" placeholder="Last Name" name="lName">
-            <br/>
-            <label for="email_signup" class="sign_up_labels">Email</label>
-            <br/>
-            <input class="inptUser" type="text" id="email_signup" placeholder="Email Address" name="Email">
-            <br/>
-            <label for="birthDate_signup" class="sign_up_labels">Birth Date</label>
-            <br/>
-            <input class="inptUser" type="date" id="birthDate_signup" text-align ="center" name="birthDate">
+            <label for="email_signup" class="sign_up_labels_signup">Email</label>
+            <input class="inptUser_signup" type="text" id="email_signup" placeholder="Email Address" name="Email">
             <br/>
             <label id = "errors_signup" class="errorMessages"></label>
             <br/>
             <input class="btn" type="submit" id="submit_btn" value="Submit" >
+            
         </form>
-
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
     </div>
     <script type="text/javascript">
 
@@ -313,7 +431,7 @@
             var firstName = document.getElementById('firstName_signup').value;
             var lastName = document.getElementById('lastName_signup').value;
             var email = document.getElementById('email_signup').value;
-            var birthDate = document.getElementById('birthDate_signup').value;
+            //var birthDate = document.getElementById('birthDate_signup').value;
             //Check validation using jquery
             //if it's ok then:
             var newUser = new Object();
@@ -322,7 +440,7 @@
             newUser.firstName = firstName;
             newUser.lastname = lastName;
             newUser.email = email;
-            newUser.birthdate = birthDate;
+            //newUser.birthdate = birthDate;
             usersArr.push(newUser);
             GoTo('login');
 
@@ -334,7 +452,7 @@
             document.getElementById('firstName_signup').value="";
             document.getElementById('lastName_signup').value="";
             document.getElementById('email_signup').value="";
-            document.getElementById('birthDate_signup').value=today;
+           // document.getElementById('birthDate_signup').value=today;
         }
     </script>
 </section>
@@ -686,14 +804,43 @@
 
 </section>
 <section id="about" display="none">
-    <h1 id=center>about</h1>
-    <h1>Jerusalem is totally unique – there is no other place like it. A city of tradition, religion, 
+    <style>
+        #about_img1
+        {
+            margin-left: 17%;
+            
+        }
+        #about_img2
+        {
+            margin-left: 5%;
+            
+        }
+        #about_img3
+        {
+            margin-left: 17%;
+            margin-top: 5%;
+        }
+        #about_img4
+        {
+            margin-left: 5%;
+            margin-top: 5%;
+        }
+       
+        #about_content
+        {
+            text-align: center;
+            
+        }
+        
+    </style>
+    <h1 id="about_content">Jerusalem is totally unique – there is no other place like it. A city of tradition, religion, 
         and history, but also, increasingly, of modern culture and heritage, it is a city with so much
-        to offer that you could spend years here and still not see everything.</h1>
-        <img src="source/about1.jpeg" width="300" height="300">
-        <img src="source/about2.jpeg" width="300" height="300">
-        <img src="source/about3.jpeg" width="300" height="300">
-        <img src="source/about4.jpeg" width="300" height="300">
+        to offer that you could spend years here and still not see everything</h1>
+        <img src="source/about1.jpeg" width="600" height="500" id="about_img1">
+        <img src="source/about2.jpeg" width="600" height="500" id="about_img2">
+        <br/>
+        <img src="source/about3.jpeg" width="600" height="500" id="about_img3">
+        <img src="source/about4.jpeg" width="600" height="500" id="about_img4">
 </section>
 
 
@@ -717,7 +864,7 @@
     <canvas id="canvas" height="600" width="600"></canvas>
     <style>
         #body_game {
-            background: url('source/background.jpg') no-repeat center center fixed;
+            background: url('source/background.jpeg') no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
