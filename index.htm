@@ -57,10 +57,10 @@
             var select_color = "#336b87";
             var regular_background_color = "#90afc5";
 
-            var welcome = document.getElementById('welcome');
-            welcome.style.display = "none";
-            var welcome_menu = document.getElementById('welcome' +menu_extension);
-            welcome_menu.style.backgroundColor = regular_background_color;
+            //var welcome = document.getElementById('welcome');
+            //welcome.style.display = "none";
+            //var welcome_menu = document.getElementById('welcome' +menu_extension);
+            //welcome_menu.style.backgroundColor = regular_background_color;
 
             var signup = document.getElementById('signup');
             signup.style.display = "none";
@@ -77,11 +77,18 @@
             var about_menu = document.getElementById('about' +menu_extension);
             about_menu.style.backgroundColor = regular_background_color;
 
+            var restore = document.getElementById('restorePassword');
+            restore.style.display = "none";
+            
 
             var go_to = document.getElementById(section_name);
             go_to.style.display = "block";
-            var menu_go_to = document.getElementById(section_name+menu_extension);
-            menu_go_to.style.backgroundColor = select_color;
+            if(section_name != "restorePassword")
+            {
+                var menu_go_to = document.getElementById(section_name+menu_extension);
+                menu_go_to.style.backgroundColor = select_color;
+            }
+            
 
 
             document.body.style.backgroundImage = "url('source/background.jpeg')";
@@ -128,7 +135,9 @@
             usersArr.push(fakeUser);
 
 
-            var starting_page = 'welcome';
+            //var starting_page = 'welcome';
+            //var starting_page = 'restorePassword';
+            var starting_page = 'login';
             GoTo(starting_page);
 
         }
@@ -170,17 +179,6 @@
         font-family: "Comic Sans MS", "Comic Sans", cursive;
     }
 
-
-</style>
-<ul>
-    <li id="welcome_menu" onclick="GoTo('welcome')"><a>Welcome</a></li>
-    <li id="signup_menu" onclick="GoTo('signup')"><a>Sign Up</a></li>
-    <li id="login_menu" onclick="GoTo('login')"><a>Login</a></li>
-    <li id="about_menu" onclick="GoTo('about')"><a>About</a></li>
-    
-</ul>
-<section id="welcome" display="none" >
-    <style>
         .btn
         {
             width: 100%;
@@ -203,7 +201,17 @@
             width: 100%;
 
         }
-    </style>
+    
+
+</style>
+<ul>
+    <li id="login_menu" onclick="GoTo('login')"><a>Welcome</a></li>
+    <li id="signup_menu" onclick="GoTo('signup')"><a>Sign Up</a></li>
+    <li id="about_menu" onclick="GoTo('about')"><a>About</a></li>
+    
+</ul>
+<!--
+<section id="welcome" display="none" >
 
     <div id ="welcome_div">
         <input type="button" id="welcome_signup" class="btn" value="Sign Up" onclick="GoTo('signup')">
@@ -214,6 +222,7 @@
 
 
 </section>
+-->
 <section id="signup" display="none">
     <style>
         .userdiv{
@@ -408,91 +417,111 @@
     </script>
 </section>
 <section id="login" display="none">
-    <style>
-        #div_login
-        {
-            position:fixed;
-            top: 35%;
-            left: 30%;
-        }
-    </style>
-    <div class="userdiv" id="div_login">
-        <h1 class="sign_up_labels">Login:</h1>
-        <label class="sign_up_labels">Username</label>
-        <br/>
-        <input class="inptUser" type="text" id="username_login" placeholder="Username">
-        <br/>
-        <label for="password_signup" class="sign_up_labels">Password</label>
-        <br/>
-        <input class="inptUser" type="password" id="password_login" placeholder="Password" class="sign_up_labels">
-        <br/>
-        <label id = "errors_login" class="errorMessages"></label>
-        <br/>
-        <br/>
-        <br/>
-
-        <input class="btn" type="button" id="login_btn" value="Log In" onclick="loginPressed()">
-
-
-
-    </div>
-    <script type="text/javascript">
-        function ShowLoggedUser()
-        {
-           // var game = document.getElementById('game_menu');
-           // game.hidden = false;
-            document.getElementById('start_setting_btn').disabled = false;
-        }
-        function loginPressed()
-        {
-
-            var isValid = ValidateUser();
-            var errorLabel = document.getElementById('errors_login');
-            if(isValid)
+        <style>
+    
+        
+            #div_login
             {
-                ShowLoggedUser();
-
-                errorLabel.innerText = "";
-                GoTo('settings');
-
-
+                position:fixed;
+                top: 35%;
+                left: 30%;
             }
-            else
+            #li_restore_btn
             {
-                var errorMessage = "Wrong username or password, please try again";
-                errorLabel.innerText = errorMessage;
+               
+                width:100%;
             }
-        }
-        function ValidateUser()
-        {
-            var username = document.getElementById('username_login').value;
-            var password = document.getElementById('password_login').value;
-
-            var i;
-            for (i = 0; i < usersArr.length; i++) {
-                if(username === usersArr[i].username)
+            #li_new_user_btn
+            {
+               
+                width:100%;
+            }
+            #btn_list_login
+            {
+                display: inline-flex;
+                width: 100%;
+            }
+        </style>
+        <div class="userdiv" id="div_login">
+            <h1 class="sign_up_labels">Login:</h1>
+            <label class="sign_up_labels">Username</label>
+            <br/>
+            <input class="inptUser" type="text" id="username_login" placeholder="Username">
+            <br/>
+            <label for="password_signup" class="sign_up_labels">Password</label>
+            <br/>
+            <input class="inptUser" type="password" id="password_login" placeholder="Password" class="sign_up_labels">
+            <br/>
+            <label id = "errors_login" class="errorMessages"></label>
+            <br/>
+            <br/>
+            <br/>
+    
+            <input class="btn" type="button" id="login_btn" value="Log In" onclick="loginPressed()">
+            <br/>
+            <ul id="btn_list_login">
+                <li id="li_restore_btn"><input class="btn" type="button" id="restore_btn" value="restore" onclick="loginPressed()"></li>
+                <li id="li_new_user_btn"><input class="btn" type="button" id="new_user" value="new user" onclick="loginPressed()"></li>
+            </ul>
+    
+    
+        </div>
+        <script type="text/javascript">
+            function ShowLoggedUser()
+            {
+                var game = document.getElementById('game_menu');
+                game.hidden = false;
+                document.getElementById('start_setting_btn').disabled = false;
+            }
+            function loginPressed()
+            {
+    
+                var isValid = ValidateUser();
+                var errorLabel = document.getElementById('errors_login');
+                if(isValid)
                 {
-                    if( password === usersArr[i].password)
-                    {
-                        current = usersArr[i];
-                        return true;
-                    }
-
+                    ShowLoggedUser();
+    
+                    errorLabel.innerText = "";
+                    GoTo('settings');
+    
+    
+                }
+                else
+                {
+                    var errorMessage = "Wrong username or password, please try again";
+                    errorLabel.innerText = errorMessage;
                 }
             }
-            return false;
-
-        }
-        function ResetLogin()
-        {
-            var username = document.getElementById('username_login');
-            var password = document.getElementById('password_login');
-            username.value = "";
-            password.value ="";
-        }
-    </script>
-</section>
-
+            function ValidateUser()
+            {
+                var username = document.getElementById('username_login').value;
+                var password = document.getElementById('password_login').value;
+    
+                var i;
+                for (i = 0; i < usersArr.length; i++) {
+                    if(username === usersArr[i].username)
+                    {
+                        if( password === usersArr[i].password)
+                        {
+                            current = usersArr[i];
+                            return true;
+                        }
+    
+                    }
+                }
+                return false;
+    
+            }
+            function ResetLogin()
+            {
+                var username = document.getElementById('username_login');
+                var password = document.getElementById('password_login');
+                username.value = "";
+                password.value ="";
+            }
+        </script>
+    </section>
 <section id="about" display="none">
     <style>
         #about_img1
@@ -532,12 +561,40 @@
         <img src="source/about3.jpeg" width="600" height="500" id="about_img3">
         <img src="source/about4.jpeg" width="600" height="500" id="about_img4">
 </section>
+<section id="restorePassword">
+<style>
+    #div_restore
+    {
+        position:fixed;
+        top: 35%;
+        left: 30%;
+    }
+</style>
+    <div class="userdiv" id="div_restore">
+        <h1 class="sign_up_labels">Restore Password</h1>
+        <label class="sign_up_labels">Choose security question:</label>
+        <br/>
+        <select id="select_question" class="inptUser">
+            <option>
+                default question
+            </option>
+        </select>
+        <br/>
+        <label for="answer_restore" class="sign_up_labels">Answer</label>
+        <br/>
+        <input class="inptUser" type="text" id="answer_restore" placeholder="Input Answer" class="sign_up_labels">
+        <br/>
+        <label id = "errors_login" class="errorMessages"></label>
+        <br/>
+        <br/>
+        <br/>
+
+        <input class="btn" type="submit" id="submit_restore_btn" value="Submit" >
 
 
 
-
-
-
+    </div>
+</section>
 <footer id="footer">
 <style>
     #footer
@@ -592,7 +649,7 @@
             font-size: 28px;
         }
     </style>
-    </head>
+  
 -->
     <!-- The Modal -->
     <!--
