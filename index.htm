@@ -31,7 +31,10 @@
                                 <br/>& Jonathan Shaya - 318530706
                             </h4></li>
                     <li><a><img src="source/logo.jpg" width= "400" height="125" id="logo"></a></li>
-                    
+                    <h4>
+                            <h1 id="hello">hello </h1>
+                           
+                        </h4></li>
         
             </ul>
 
@@ -49,8 +52,8 @@
 
         window.addEventListener("load",Initialize);
         var usersArr;
-        var today;
         var current;
+        var src;
         function GoTo(section_name)
         {   
             var menu_extension = "_menu";
@@ -77,13 +80,26 @@
             var about_menu = document.getElementById('about' +menu_extension);
             about_menu.style.backgroundColor = regular_background_color;
 
+            var about = document.getElementById('POI');
+            about.style.display = "none";
+            var about_menu = document.getElementById('POI' +menu_extension);
+            about_menu.style.backgroundColor = regular_background_color;
+
+            var about = document.getElementById('POI_user');
+            about.style.display = "none";
+            var about_menu = document.getElementById('POI_user' +menu_extension);
+            about_menu.style.backgroundColor = regular_background_color;
+
             var restore = document.getElementById('restorePassword');
             restore.style.display = "none";
-            
+
+            var restore = document.getElementById('singlePhoto');
+            restore.style.display = "none";
 
             var go_to = document.getElementById(section_name);
             go_to.style.display = "block";
-            if(section_name != "restorePassword")
+
+            if(section_name != "restorePassword" && section_name!="singlePhoto")
             {
                 var menu_go_to = document.getElementById(section_name+menu_extension);
                 menu_go_to.style.backgroundColor = select_color;
@@ -111,6 +127,22 @@
                                 document.body.style.backgroundImage = "url('source/background_game.jpg')";
                             
                             }
+                            else
+                            {
+                                if(section_name === "POI")
+                                {
+                                    var arrayOfImages =[] //Change the array to something from the server
+                                    displayPhotos(arrayOfImages);
+                                }
+                                else
+                                {
+                                    if(section_name === "POI_user")
+                                    {
+                                        var arrayOfImages =[] //Change the array to something from the server
+                                        displayPhotosPersonal(arrayOfImages);
+                                    }   
+                                }
+                            }
                         
                     }
                 }
@@ -123,7 +155,7 @@
 
             //Creating array of users
             usersArr = new Array();
-
+            isLogged =false;
             //Creating the fake user
             var fakeUser = new Object();
             fakeUser.username = "a";
@@ -133,13 +165,66 @@
             fakeUser.lastname = "a";
             //fakeUser.birthdate = today;
             usersArr.push(fakeUser);
-
-
+            src = {};
+            document.getElementById('POI_user_menu').hidden = true;
+            setImagesOnClick();
+            changeHello();
             //var starting_page = 'welcome';
             //var starting_page = 'restorePassword';
             var starting_page = 'login';
             GoTo(starting_page);
 
+        }
+        function setImagesOnClick()
+        {
+            let images = document.getElementsByTagName("img");
+            
+            for(var i=0;i<images.length;i++)
+            {
+                
+                let id = images[i].id
+                if(id != "singlePhotoImage")
+                {
+                    src[images[i].id] =images[i].src;
+                    images[i].onclick = function ()
+                    {
+                        displaySinglePhoto(src[id]);
+                    };
+                }
+                
+                
+                
+            }
+          
+            
+            
+        }
+        function whenLoggin()
+        {
+            document.getElementById("signup_menu").hidden = true;
+            document.getElementById("POI_user_menu").hidden = false;
+            changeHello();
+        }
+        function changeHello()
+        {
+            var hello = document.getElementById("hello");
+            var helloString = "hello ";
+            if (typeof current === 'undefined') 
+            { 
+                    hello.innerHTML = helloString+ "guest";
+            }
+            else
+            {
+                hello.innerHTML = helloString + current.username;
+            }
+        }
+        function displaySinglePhoto (src)
+        {
+            var id = "singlePhotoImage";
+            var singleImage = document.getElementById(id);
+            
+            singleImage.src = src;
+            GoTo('singlePhoto');
         }
     </script>
 
@@ -208,21 +293,55 @@
     <li id="login_menu" onclick="GoTo('login')"><a>Welcome</a></li>
     <li id="signup_menu" onclick="GoTo('signup')"><a>Sign Up</a></li>
     <li id="about_menu" onclick="GoTo('about')"><a>About</a></li>
+    <li id="POI_menu" onclick="GoTo('POI')"><a>POI's</a></li>
+    <li id="POI_user_menu" onclick="GoTo('POI_user')"><a>Personal Area</a></li>
     
 </ul>
-<!--
-<section id="welcome" display="none" >
+<section id="singlePhoto" >
+    <style>
+        #singlePhoto
+        {
+            text-align: center;
+        }
 
-    <div id ="welcome_div">
-        <input type="button" id="welcome_signup" class="btn" value="Sign Up" onclick="GoTo('signup')">
-        <input type="button" id="welcome_login" class="btn" value="Login" onclick="GoTo('login')">
+        #singlePhotoDiv
+        {
+            position: relative;
+            width: fit-content;
+            height: fit-content;
+            left: 15%;
+        }
+        #list_statistics
+        {
+            text-align: left;
+            position: relative;
+            float: right;
+            margin-left: 20px;
+            color: black;
+            background: #cee9ea;
+            margin-top: 1%;
+            display: block;
+            
+            
+        }
+        .li_statistics{
+            display: block;
+            width:100px;
+        }
+    </style>
+    <div id="singlePhotoDiv" class="userdiv">
+            <img height="600" width= "600" id="singlePhotoImage">
+        <div id="list_statistics" display ="block">
+            <p class="li_statistics"><h1>Number of Viewers: </h1></p>
+            <p class="li_statistics"><h4>Description: </h4></p>
+            <p class="li_statistics"><h1>Rank: </h1></p>
+            <p class="li_statistics"><h4>Review 1: </h4></p>
+            <p class="li_statistics"><h4>Review 2: </h4></p>
+        </div>
     </div>
-
-
-
+    
 
 </section>
--->
 <section id="signup" display="none">
     <style>
         .userdiv{
@@ -423,7 +542,6 @@
             #div_login
             {
                 position:fixed;
-                top: 35%;
                 left: 30%;
             }
             #li_restore_btn
@@ -441,6 +559,13 @@
                 display: inline-flex;
                 width: 100%;
             }
+            #explore_div
+            {
+                text-align: center;
+                position:fixed;
+                left: 35%;
+                top: 63.5%;
+            }
         </style>
         <div class="userdiv" id="div_login">
             <h1 class="sign_up_labels">Login:</h1>
@@ -451,7 +576,7 @@
             <label for="password_signup" class="sign_up_labels">Password</label>
             <br/>
             <input class="inptUser" type="password" id="password_login" placeholder="Password" class="sign_up_labels">
-            <br/>
+            <br/>   
             <label id = "errors_login" class="errorMessages"></label>
             <br/>
             <br/>
@@ -460,19 +585,18 @@
             <input class="btn" type="button" id="login_btn" value="Log In" onclick="loginPressed()">
             <br/>
             <ul id="btn_list_login">
-                <li id="li_restore_btn"><input class="btn" type="button" id="restore_btn" value="restore" onclick="loginPressed()"></li>
-                <li id="li_new_user_btn"><input class="btn" type="button" id="new_user" value="new user" onclick="loginPressed()"></li>
+                <li id="li_restore_btn"><input class="btn" type="button" id="restore_btn" value="restore" onclick="GoTo('restorePassword')"></li>
+                <li id="li_new_user_btn"><input class="btn" type="button" id="new_user" value="register" onclick="GoTo('signup')"></li>
             </ul>
-    
-    
+        </div>
+        <div id="explore_div">
+            <p><h1>Explore</h1></p>
+            <img id="explore1" src="source/about1.jpeg" width="200" height="200"><!--Delete the src-->
+            <img id="explore2" src="source/about1.jpeg" width="200" height="200">
+            <img id="explore3" src="source/about1.jpeg" width="200" height="200">
         </div>
         <script type="text/javascript">
-            function ShowLoggedUser()
-            {
-                var game = document.getElementById('game_menu');
-                game.hidden = false;
-                document.getElementById('start_setting_btn').disabled = false;
-            }
+            
             function loginPressed()
             {
     
@@ -480,10 +604,10 @@
                 var errorLabel = document.getElementById('errors_login');
                 if(isValid)
                 {
-                    ShowLoggedUser();
-    
+           
+                    whenLoggin();
                     errorLabel.innerText = "";
-                    GoTo('settings');
+                    GoTo('POI_user');
     
     
                 }
@@ -521,6 +645,89 @@
                 password.value ="";
             }
         </script>
+    </section>
+<section id="POI" display ="none">
+
+    <style>
+        .demo{
+            text-align: center;
+            
+        }
+    </style>
+    <p class="demo" id="demo"></p>
+    <script type="text/javascript">
+
+        function displayPhotos (pointOfInterestArray)
+        {
+            pointOfInterestArr=[] // Take that off when needed
+        var arr1 = ["https://ichef.bbci.co.uk/news/660/cpsprodpb/83C0/production/_104182733_jerusalem.jpg","https://www.touristisrael.com/wp-content/uploads/Tower-of-David.jpg"]
+        
+        var arr2 = ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCkWq2--gI5tRB9VFE5S5TENyuMLm5OoAHGUFDxsKtKFd0PbFO","https://www.brookings.edu/wp-content/uploads/2017/12/jerusalem_aerial001-e1512487211181.jpg"]
+        var arr3 = []
+        pointOfInterestArr.push(arr1)
+        pointOfInterestArr.push(arr2)
+        pointOfInterestArr.push(arr3)
+        var x="";
+        var categoryArr;
+        for(var i=0; i<pointOfInterestArr.length;i++)
+        {
+            for(var j=0; j<pointOfInterestArr[i].length;j++)
+            {
+                x = x + "<img id=\"img"+i+","+j+"\" src=\'"+pointOfInterestArr[i][j]+"\' width=\"300\" height=\"300\">" 
+            }
+            x= x + "<br/>"
+        }
+
+            document.getElementById("demo").innerHTML = x;
+            setImagesOnClick();
+        }
+    </script>
+
+</section>
+<section id="POI_user" display ="none">
+
+        <style>
+            #demo{
+                text-align: center;
+                
+            }
+            .personal_image
+            {
+                margin-left: 15px;
+            }
+        </style>
+        <p class="demo" id="demo_user"></p>
+        <script type="text/javascript">
+    
+            function displayPhotosPersonal (pointOfInterestArray)
+            {
+                pointOfInterestArr=[] // Take that off when needed
+            var arr1 = ["https://ichef.bbci.co.uk/news/660/cpsprodpb/83C0/production/_104182733_jerusalem.jpg","https://www.touristisrael.com/wp-content/uploads/Tower-of-David.jpg"]
+            
+            var arr2 = ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCkWq2--gI5tRB9VFE5S5TENyuMLm5OoAHGUFDxsKtKFd0PbFO","https://www.brookings.edu/wp-content/uploads/2017/12/jerusalem_aerial001-e1512487211181.jpg"]
+            
+            pointOfInterestArr.push(arr1)
+            pointOfInterestArr.push(arr2)
+            
+            var x="";
+            var categoryArr;
+                x = x+ "<h1>Saved point of interest </h1>"
+                for(var j=0; j<pointOfInterestArr[0].length;j++)
+                {
+                    x = x + "<img id=\"imgp"+0+","+j+"\" src=\'"+pointOfInterestArr[0][j]+"\' width=\"300\" height=\"300\" class=\"personal_image\">" 
+                }
+                x= x + "<br/>"
+                x = x+ "<h1>Recommended point of interest </h1>"
+                for(var j=0; j<pointOfInterestArr[1].length;j++)
+                {
+                    x = x + "<img id=\"imgp"+1+","+j+"\" src=\'"+pointOfInterestArr[1][j]+"\' width=\"300\" height=\"300\" class=\"personal_image\">" 
+                }
+    
+                document.getElementById("demo_user").innerHTML = x;
+                setImagesOnClick();
+            }
+        </script>
+    
     </section>
 <section id="about" display="none">
     <style>
@@ -594,7 +801,14 @@
 
 
     </div>
+    <script type="text/javascript">
+        function validateAnswer(givenAnswer , correctAnswer)
+        {
+            return givenAnswer === correctAnswer;
+        }
+    </script>
 </section>
+<!--
 <footer id="footer">
 <style>
     #footer
@@ -608,7 +822,7 @@
 </style>
     <h4>
         <p>
-            <b>Best Pacman Online</b>
+            <b>Best POI Online</b>
             <br/>
             <i>Contact information:</i>
 
@@ -621,11 +835,11 @@
 
 
 </footer>
-</html>
+-->
 <!--
+</html>
     <style>
-        body {font-family: David, Helvetica, sans-serif;}
-        .modal {
+    .modal {
             display: none;
             width: 30%;
             height: 100%;
@@ -635,12 +849,24 @@
             top: 0;
         }
 
+        #commit_btn{
+            width: 50%;
+            display: inline-block;
+            margin-bottom: 1%;
+            padding: 20px 0px;
+            text-align: center;
+            color: white;
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            position: relative;
+            background: linear-gradient(-45deg,#336b87,#90afc5);
+        }
+
         .modal-content {
             background-color: #fefefe;
             margin: auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
+            width: 20%;
         }
 
         .close {
@@ -650,33 +876,36 @@
         }
     </style>
   
--->
-    <!-- The Modal -->
-    <!--
-    <div id="myModal" class="modal">
--->
-            <!-- Modal content -->
-            <!--
-
-            <div class="modal-content">
+  
+    
+            <div id="myModal" class="modal-content">
                 <span class="close">&times;</span>
                 <H1>comment</H1>
                 <textarea style="resize:none" id="text" cols="50" rows="5"></textarea>
                 <H1>rating</H1>
-                <div align="center"></div>
-                <select >
+                <select id= numbers>
                     <option value="num1">1</option>
                     <option value="num2">2</option>
                     <option value="num3">3</option>
                     <option value="num4">4</option>
                     <option value="num5">5</option>
-                  </select>
+                  </select>-
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <input class="btn" type="button" id="commit_btn" value="commit" onclick="extractData()">
             </div>
-            </div>
-    
-        </div>
-    
+           
         <script>
+            function extractData(){
+                var x = document.getElementById("text").value;
+                var e = document.getElementById("numbers");
+                var strUser = e.options[e.selectedIndex].text;        
+            }
     
             var modal = document.getElementById('myModal');
     
@@ -701,47 +930,7 @@
                     modal.style.display = "none";
                 }
             }, false);
-    
         </script>
--->
-<!--
-    <style>
-        #demo{
-            text-align: center;
-            
-        }
-    </style>
-    <p id="demo"></p>
-    <script type="text/javascript">
-    var pointOfInterestArr=[]
-    var arr1 = ["https://ichef.bbci.co.uk/news/660/cpsprodpb/83C0/production/_104182733_jerusalem.jpg","https://www.touristisrael.com/wp-content/uploads/Tower-of-David.jpg"]
-    
-    var arr2 = ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCkWq2--gI5tRB9VFE5S5TENyuMLm5OoAHGUFDxsKtKFd0PbFO","https://www.brookings.edu/wp-content/uploads/2017/12/jerusalem_aerial001-e1512487211181.jpg"]
-    var arr3 = []
-    pointOfInterestArr.push(arr1)
-    pointOfInterestArr.push(arr2)
-    pointOfInterestArr.push(arr3)
-    var x="";
-    var categoryArr;
-    for(var i=0; i<pointOfInterestArr.length;i++)
-    {
-        for(var j=0; j<pointOfInterestArr[i].length;j++)
-        {
-            x = x + "<img id=\"img"+i+","+j+"\" src=\'"+pointOfInterestArr[i][j]+"\' width=\"300\" height=\"300\">" 
-        }
-         x= x + "<br/>"
-    }
-   // var str = '<ul class=\'about\' style=\'position:absolute; bottom:0px\'>';
 
-    //    for(var i in pointOfInterestArr){
-    //       str += '<li><a href="#">String 1</a></li>';
-    //    }
-        
-     //   str += '</ul>';
-        
-     //   $('body').append(str);
-      //  var x =pointOfInterestArr.toString();
-        document.getElementById("demo").innerHTML = x;
-    </script>
--->
+--> 
 
