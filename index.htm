@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-
+<!--Create all the images using addCustomImage-->
 <head>
     <title>Guy and Jonathan's POI</title>
     <style>
@@ -54,12 +54,26 @@
         var usersArr;
         var current;
         var src;
+        var checkedSort = false;
+        var isFiltered = false;
+        var countries = "<Countries>"+"<Country>"+"<ID>1</ID>"+"<Name>Australia</Name>"+"</Country>"+"<Country>"+
+		"<ID>2</ID>"+"<Name>Bolivia</Name>"+ "</Country>"+ "<Country>"+"<ID>3</ID>"+"<Name>China</Name>"+
+        "</Country>"+"<Country>"+ "<ID>4</ID>"+"<Name>Denemark</Name>"+"</Country>"+"<Country>"+ "<ID>5</ID>"+
+        "<Name>Israel</Name>"+"</Country>"+"<Country>"+ "<ID>6</ID>"+"<Name>Latvia</Name>"+"</Country>"+"<Country>"+
+        "<ID>7</ID>"+ "<Name>Monaco</Name>"+ "</Country>"+"<Country>"+"<ID>8</ID>"+"<Name>August</Name>"+"</Country>"+
+        "<Country>"+"<ID>9</ID>"+"<Name>Norway</Name>"+"</Country>"+"<Country>"+"<ID>10</ID>"+"<Name>Panama</Name>"+
+        "</Country>"+ "<Country>"+"<ID>11</ID>"+"<Name>Switzerland</Name>"+ "</Country>"+"<Country>"+"<ID>12</ID>"+
+        "<Name>USA</Name>"+"</Country>"+"</Countries>";
         function GoTo(section_name)
         {   
             var menu_extension = "_menu";
             var select_color = "#336b87";
             var regular_background_color = "#90afc5";
-
+            
+            checkedSort = false;
+            isFiltered = false;
+            document.getElementById("sort_by_rank_btn").style.backgroundColor = "cadetblue";
+            
             //var welcome = document.getElementById('welcome');
             //welcome.style.display = "none";
             //var welcome_menu = document.getElementById('welcome' +menu_extension);
@@ -106,18 +120,22 @@
             }
             
 
-
+            document.getElementById("sort_POI").hidden = true;
             document.body.style.backgroundImage = "url('source/background.jpeg')";
-            
+
+            leave();
+
              if(section_name === "signup")
                 {
                     ResetSignUp();
+                    //test();
                 }
                 else
                 {
                     if(section_name === "login")
                     {
                         ResetLogin();
+                        //test(); 
                     }
                     else
                     {
@@ -125,14 +143,15 @@
                             if(section_name === "about")
                             {
                                 document.body.style.backgroundImage = "url('source/background_game.jpg')";
-                            
+                                addAboutPhotos();
                             }
                             else
                             {
                                 if(section_name === "POI")
                                 {
-                                    var arrayOfImages =[] //Change the array to something from the server
-                                    displayPhotos(arrayOfImages);
+                                    document.getElementById("sort_POI").hidden = false;
+                                    var arrayOfImages ={} //Change the array to something from the server
+                                    photoDisplay("");
                                 }
                                 else
                                 {
@@ -152,7 +171,7 @@
         }
         function Initialize()
         {
-
+            section_containers = [];
             //Creating array of users
             usersArr = new Array();
             isLogged =false;
@@ -164,13 +183,62 @@
             fakeUser.email = "a";
             fakeUser.lastname = "a";
             //fakeUser.birthdate = today;
-            usersArr.push(fakeUser);
             src = {};
-            document.getElementById('POI_user_menu').hidden = true;
+            photoDisplay("");
+            document.getElementById("select_category_filter").onchange = function()
+            {
+
+                var select = document.getElementById("select_category_filter").value;
+                if(select === "No Filter")
+                {
+                    isFiltered = false;
+                     //Change to server output
+                     photoDisplay("");
+                }
+                else
+                {
+                    isFiltered = true;
+                    photoDisplay(select);
+                }
+                
+            };
+            
+            document.getElementById("sort_by_rank_btn").onclick = function()
+            {
+                checkedSort = !checkedSort;
+                if(!checkedSort)
+                {
+                    document.getElementById("sort_by_rank_btn").style.backgroundColor = "cadetblue" ;
+                }
+                else
+                {
+                    document.getElementById("sort_by_rank_btn").style.backgroundColor = "#6495ED";
+                }
+
+                
+                var select = document.getElementById("select_category_filter").value;
+                if(select === "No Filter")
+                {
+                
+                     //Change to server output
+                     photoDisplay("");
+                }
+                else
+                {
+                
+                    photoDisplay(select);
+                }
+                
+            };
+            resetCountries();
+
+            usersArr.push(fakeUser);
+            
+            //document.getElementById('POI_user_menu').hidden = true;
+            document.getElementById('sort_POI').hidden = true;
             setImagesOnClick();
             changeHello();
-            //var starting_page = 'welcome';
-            //var starting_page = 'restorePassword';
+         
             var starting_page = 'login';
             GoTo(starting_page);
 
@@ -183,7 +251,7 @@
             {
                 
                 let id = images[i].id
-                if(id != "singlePhotoImage")
+                if(id != "singlePhotoImage" && id.substring(0,5)!="small" && id!="logo")
                 {
                     src[images[i].id] =images[i].src;
                     images[i].onclick = function ()
@@ -204,6 +272,7 @@
             document.getElementById("signup_menu").hidden = true;
             document.getElementById("POI_user_menu").hidden = false;
             changeHello();
+            GoTo('POI_user');
         }
         function changeHello()
         {
@@ -286,16 +355,65 @@
             width: 100%;
 
         }
-    
+        
+        #search_menu_txt
+        {
+            margin-top: 8%;
+            width: 60 px;
+            height: 4%;
+            
 
+
+            
+        }
+
+        #search_btn{
+            margin-left: 30%;
+            width:60px;
+            height: 10px;
+            padding-top: 20%;
+            text-align: center;
+            
+        }
+        #commit_btn
+        {
+            
+            margin-top:12px;
+        }
+        #search_menu
+        {
+            margin-left: 53%;
+        }
+        #select_category_filter
+        {
+            margin-top: 17px;
+        }
+        #sort_POI
+        {
+            padding-left: 40%;
+            background-color:cadetblue;
+        }
 </style>
+
 <ul>
     <li id="login_menu" onclick="GoTo('login')"><a>Welcome</a></li>
     <li id="signup_menu" onclick="GoTo('signup')"><a>Sign Up</a></li>
     <li id="about_menu" onclick="GoTo('about')"><a>About</a></li>
     <li id="POI_menu" onclick="GoTo('POI')"><a>POI's</a></li>
     <li id="POI_user_menu" onclick="GoTo('POI_user')"><a>Personal Area</a></li>
-    
+    <li id="search_menu"><a>search:</a></li>
+    <li id="search_menu_right"><input type="text" id="search_menu_txt" text-align ="center"> </li>
+    <li id="commit_btn"> <input class="btn" type="button" id="search_btn" value="search"></li>
+</ul>
+<ul id="sort_POI">
+    <li id="filter_by_category_btn"><a>filter by category</a></li>
+    <li><select id="select_category_filter">
+        <option>No Filter</option>
+        <option>category1</option>
+        <option>category2</option>
+        <option>category3</option>
+    </select></li>
+    <li id="sort_by_rank_btn"><a>Sort by rank</a></li>  
 </ul>
 <section id="singlePhoto" >
     <style>
@@ -448,7 +566,12 @@
         {
             margin-left: 42px;
         }
-       
+       #category_signup
+       {
+            margin-left: 20px;
+            position: relative;
+            
+       }
       
     </style>
     
@@ -457,38 +580,56 @@
         <h1 id = "sign_up_headline">Sign Up</h1>
         <form id="sign_up_form">
             
-            
+            <!--Username-->
             <label id="username_lbl" for="username_signup" class="sign_up_labels_signup">Username</label>
             <input class="inptUser_signup" type="text" id="username_signup" placeholder="Username" name="username">
+            <!--Password-->
             <label for="password_signup" class="sign_up_labels_signup" id="password_lbl">Password</label>
             <input class="inptUser_signup" type="password" id="password_signup" placeholder="Password" name="password">
             <br/>
+            <!--First name-->
             <label for="firstName_signup" class="sign_up_labels_signup">First Name</label>
             <input class="inptUser_signup" type="text" id="firstName_signup" placeholder="First Name" name="fName">
+            <!--Last name-->
             <label for="lastName_signup"  id="lastName_lbl" class="sign_up_labels_signup">Last Name</label>
             <input class="inptUser_signup" type="text" id="lastName_signup" placeholder="Last Name" name="lName">
             <br/>
-      
+            <!--Country-->
             <label for="country_signup" class="sign_up_labels_signup" id="country_lbl">Country</label>
-            <select name="Country" id="country_signup" form="carform" class="inptUser_signup">
+            <select name="country" id="country_signup" class="inptUser_signup" >
                <option>Select Country</option>
             </select>
+            <!--City-->
             <label for="city_signup" class="sign_up_labels_signup" id="city_lbl">City</label>
-            <input class="inptUser_signup" type="text" id="city_signup" text-align ="center" name="city">
+            <input class="inptUser_signup" type="text" id="city_signup" text-align ="center" name="city" placeholder="city">
             <br/>
+            <!--Question-->
             <label for="question" class="sign_up_labels_signup" id="question_lbl">Question</label>
-            <input class="inptUser_signup" type="text" id="question_signup" text-align ="center" name="question">
+            <input class="inptUser_signup" type="text" id="question_signup" text-align ="center" name="question" placeholder="Question">
+            <!--Answer-->
             <label for="answer" class="sign_up_labels_signup" id="answer_lbl">Answer</label>
-            <input class="inptUser_signup" type="text" id="answer_signup" text-align ="center" name="answer">
+            <input class="inptUser_signup" type="text" id="answer_signup" text-align ="center" name="answer" placeholder="Answer">
             <br/>
+            <!--Username-->
             <label for="email_signup" class="sign_up_labels_signup">Email</label>
-            <input class="inptUser_signup" type="text" id="email_signup" placeholder="Email Address" name="Email">
+            <input class="inptUser_signup" type="text" id="email_signup" placeholder="Email Address" name="email">
+            <!--Categories-->
+            <br/>
+            <label for="category_signup" class="sign_up_labels_signup" id="category_lbl">Categories</label>
+            <br/>
+            <select multiple name="Categories" id="category_signup" class="inptUser_signup">
+                <option>Category1</option>
+                <option>Category2</option>
+                <option>Category3</option>
+                <option>Category4</option>
+                <option>Category5</option>
+             </select>
             <br/>
             <label id = "errors_signup" class="errorMessages"></label>
             <br/>
             <input class="btn" type="submit" id="submit_btn" value="Submit" >
-            
         </form>
+        
         <br/>
         <br/>
         <br/>
@@ -503,15 +644,111 @@
         <br/>
     </div>
     <script type="text/javascript">
+        function test()
+        {
+            
+            var section = document.getElementById("login");
 
+            addCustomImage("source/about1.jpeg",400,400,section,"id");
+        }
+        function addCustomImage(srcBig,width,height,element,id)
+        {
+        
+            //The big img
+            const bigImage = document.createElement('img');
+            bigImage.src = srcBig;
+            bigImage.width = width;
+            bigImage.height = height;
+            bigImage.id = "big"+id;
+            
+            //The small img
+            //Add the small img only of logged..
+            const smallImage = document.createElement('img');
+            smallImage.src = "source/unchecked.png";
+            const smallWidth = width/9;
+            const smallHeight = height/9;
+            smallImage.width = smallWidth;
+            smallImage.height = smallHeight;
+            smallImage.id = "small"+id;
+            smallImage.style.marginBottom= (height - smallHeight)+ "px";
+            smallImage.style.left = width+"px";
+            smallImage.style.position = "relative";
+            smallImage.onclick = function()
+            {
+                var small =  document.getElementById("small"+id);
+                if(small.src.includes( "source/unchecked.png"))
+                {
+                    smallImage.src = "source/checked.png";
+                }
+                else
+                {
+                    smallImage.src = "source/unchecked.png";
+                }
+                
+            }
+
+
+            //The container
+            const container = document.createElement('div');
+            container.id = "container"+id;
+            container.style.position = "relative";
+            container.width = width;
+            container.height = height;
+
+            container.appendChild(smallImage);
+            container.appendChild(bigImage);
+            
+            element.appendChild(container);
+            return container;
+            
+        } 
+
+        function getSelectValues(select) {
+            var result = [];
+            var options = select && select.options;
+            var opt;
+
+            for (var i=0, iLen=options.length; i<iLen; i++) {
+                opt = options[i];
+
+                if (opt.selected) {
+                result.push(opt.value || opt.text);
+                }
+            }
+            return result;
+        }
+        function resetCountries()
+        {
+            var parser = new DOMParser();
+            var xmlDoc = parser.parseFromString(countries,"text/xml");
+            var countries2 =xmlDoc.getElementsByTagName('Name');
+            var country_select = document.getElementById('country_signup');
+            country_select.remove(0);
+
+            for(var i=0; i<countries2.length;i++)
+            {
+                var option = document.createElement("option");
+                option.text = countries2[i].childNodes[0].nodeValue;
+                country_select.add(option);
+            }
+
+
+        }
         function Submit() {
+            
             var username = document.getElementById('username_signup').value;
             var password = document.getElementById('password_signup').value;
             var firstName = document.getElementById('firstName_signup').value;
             var lastName = document.getElementById('lastName_signup').value;
             var email = document.getElementById('email_signup').value;
-            //var birthDate = document.getElementById('birthDate_signup').value;
-            //Check validation using jquery
+            var country_select = document.getElementById('country_signup');
+            var city = document.getElementById('city_signup').value;
+            var question = document.getElementById('question_signup').value;
+            var answer = document.getElementById('answer_signup').value;
+            var category_select = document.getElementById('category_signup');
+            //var strUser = e.options[e.selectedIndex].text;
+            var country = country_select.options[country_select.selectedIndex].text;
+            
             //if it's ok then:
             var newUser = new Object();
             newUser.username = username;
@@ -519,9 +756,15 @@
             newUser.firstName = firstName;
             newUser.lastname = lastName;
             newUser.email = email;
+            newUser.country = country;
+            newUser.city = city;
+            newUser.question = question;
+            newUser.answer = answer;
+            newUser.categories = getSelectValues(category_select);
             //newUser.birthdate = birthDate;
             usersArr.push(newUser);
             GoTo('login');
+            
 
         }
         function ResetSignUp()
@@ -531,6 +774,10 @@
             document.getElementById('firstName_signup').value="";
             document.getElementById('lastName_signup').value="";
             document.getElementById('email_signup').value="";
+            document.getElementById('country_signup').selectedIndex=0;
+            document.getElementById('question_signup').value="";
+            document.getElementById('answer_signup').value="";
+            document.getElementById('city_signup').value="";
            // document.getElementById('birthDate_signup').value=today;
         }
     </script>
@@ -541,7 +788,7 @@
         
             #div_login
             {
-                position:fixed;
+                position:relative;
                 left: 30%;
             }
             #li_restore_btn
@@ -561,10 +808,11 @@
             }
             #explore_div
             {
-                text-align: center;
-                position:fixed;
-                left: 35%;
-                top: 63.5%;
+                text-align: center;   
+                position:relative;
+                right:0%;
+                bottom: 20%;
+            
             }
         </style>
         <div class="userdiv" id="div_login">
@@ -591,12 +839,51 @@
         </div>
         <div id="explore_div">
             <p><h1>Explore</h1></p>
-            <img id="explore1" src="source/about1.jpeg" width="200" height="200"><!--Delete the src-->
-            <img id="explore2" src="source/about1.jpeg" width="200" height="200">
-            <img id="explore3" src="source/about1.jpeg" width="200" height="200">
+            <div id="div_explore">
+                
+            </div>
         </div>
         <script type="text/javascript">
-            
+        
+               function ResetLogin()
+            {
+                var username = document.getElementById('username_login');
+                var password = document.getElementById('password_login');
+                username.value = "";
+                password.value ="";
+                addLoginPhotos();
+            }
+            function addLoginPhotos()
+            {
+                var selection = document.getElementById("div_explore");
+                var login_containers = [];
+                var container1 = addCustomImage("source/about1.jpeg",200,200,selection,"explore1");
+                var container2 = addCustomImage("source/about1.jpeg",200,200,selection,"explore2");
+                var container3 = addCustomImage("source/about1.jpeg",200,200,selection,"explore3");
+                login_containers.push(container1);
+                login_containers.push(container2);
+                login_containers.push(container3);
+                container1.style.cssFloat = "left";
+                container1.style.marginLeft = "32.75%";
+                container2.style.cssFloat = "left";
+                container3.style.cssFloat = "left";
+
+                section_containers.push(login_containers);
+                setImagesOnClick();
+            }
+            function leave()
+            {
+                for(var i=0;i<section_containers.length;i++)
+                {
+                    for(var j=0;j<section_containers[i].length;j++)
+                    {
+                        section_containers[i][j].parentNode.removeChild(section_containers[i][j]);
+                    }
+                    
+                }
+                section_containers = [];
+                
+            }
             function loginPressed()
             {
     
@@ -637,13 +924,7 @@
                 return false;
     
             }
-            function ResetLogin()
-            {
-                var username = document.getElementById('username_login');
-                var password = document.getElementById('password_login');
-                username.value = "";
-                password.value ="";
-            }
+         
         </script>
     </section>
 <section id="POI" display ="none">
@@ -653,32 +934,126 @@
             text-align: center;
             
         }
+        .POI_Images
+        {
+            margin-left: 12px;
+            margin-bottom: 12px;
+        }
+        .div_poi_general
+        {
+            margin-bottom: 18%;
+            align-content: center;
+          
+            
+        }
+    
     </style>
     <p class="demo" id="demo"></p>
     <script type="text/javascript">
 
+        function photoDisplay(categoty)
+        {
+            var pointOfInterestArray = {}; 
+            var arr1 = ["https://ichef.bbci.co.uk/news/660/cpsprodpb/83C0/production/_104182733_jerusalem.jpg","https://www.touristisrael.com/wp-content/uploads/Tower-of-David.jpg","https://www.brookings.edu/wp-content/uploads/2017/12/jerusalem_aerial001-e1512487211181.jpg"]
+            var arr2 = ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCkWq2--gI5tRB9VFE5S5TENyuMLm5OoAHGUFDxsKtKFd0PbFO","https://www.brookings.edu/wp-content/uploads/2017/12/jerusalem_aerial001-e1512487211181.jpg"]
+            var arr3 = ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCkWq2--gI5tRB9VFE5S5TENyuMLm5OoAHGUFDxsKtKFd0PbFO","https://www.brookings.edu/wp-content/uploads/2017/12/jerusalem_aerial001-e1512487211181.jpg"]
+            pointOfInterestArray["category1"]=arr1;
+            pointOfInterestArray["category2"]=arr2;
+            pointOfInterestArray["category3"]=arr3;
+
+            if(isFiltered && categoty!="")
+            {
+                filterByCategory(pointOfInterestArray,categoty);
+            }
+            else
+            {
+                noFilter(pointOfInterestArray);
+            }
+        }
+        function noFilter(pointOfInterestArray)
+        {
+           
+            if(!checkedSort)
+                displayPhotos(pointOfInterestArray)
+            else
+                orderByRank(pointOfInterestArray)
+        }//how to display
+        
+        function orderByRank(pointOfInterestArray)
+        {
+            
+             
+            if(typeof pointOfInterestArray["category1"] != 'undefined'){
+                var temp = pointOfInterestArray["category1"][0];
+            pointOfInterestArray["category1"][0] = pointOfInterestArray["category1"][1];
+            pointOfInterestArray["category1"][1] = temp;
+            }
+            
+            
+            //Sort By Rank
+            displayPhotos(pointOfInterestArray)
+        }
+        function filterByCategory(pointOfInterestArray,category)
+        {
+           
+
+            for(key in pointOfInterestArray)
+            {
+                if(key!=category)
+                {
+                    delete pointOfInterestArray[key];
+                }
+            }
+            if(!checkedSort)
+                displayPhotos(pointOfInterestArray)
+            else
+                orderByRank(pointOfInterestArray)
+        }
         function displayPhotos (pointOfInterestArray)
         {
-            pointOfInterestArr=[] // Take that off when needed
-        var arr1 = ["https://ichef.bbci.co.uk/news/660/cpsprodpb/83C0/production/_104182733_jerusalem.jpg","https://www.touristisrael.com/wp-content/uploads/Tower-of-David.jpg"]
-        
-        var arr2 = ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCkWq2--gI5tRB9VFE5S5TENyuMLm5OoAHGUFDxsKtKFd0PbFO","https://www.brookings.edu/wp-content/uploads/2017/12/jerusalem_aerial001-e1512487211181.jpg"]
-        var arr3 = []
-        pointOfInterestArr.push(arr1)
-        pointOfInterestArr.push(arr2)
-        pointOfInterestArr.push(arr3)
-        var x="";
-        var categoryArr;
-        for(var i=0; i<pointOfInterestArr.length;i++)
-        {
-            for(var j=0; j<pointOfInterestArr[i].length;j++)
-            {
-                x = x + "<img id=\"img"+i+","+j+"\" src=\'"+pointOfInterestArr[i][j]+"\' width=\"300\" height=\"300\">" 
+            
+      
+            var x="";
+            var i=0;
+            for (var key in pointOfInterestArray) {
+                
+                var value = pointOfInterestArray[key];
+
+                x = x +"<div id=\"div_img"+i+"\" class=\"div_poi_general\">";
+                x= x + "<h2>"+key+"</h2>";
+                x= x + "<br/>"
+                x = x+"</div>";
+                
+                i = i+1;
+                    
             }
-            x= x + "<br/>"
-        }
 
             document.getElementById("demo").innerHTML = x;
+
+            i=0;
+            var containers = [];
+            for (var key in pointOfInterestArray) {
+                
+                var value = pointOfInterestArray[key];
+                var selection = document.getElementById("div_img"+i);
+                for(var j=0; j<value.length;j++)
+                    {
+                    
+                        var container = addCustomImage(value[j],300,300,selection,"img"+i+","+j);
+                        container.classList.add("POI_Images");
+                        container.style.cssFloat = "left";
+                        containers.push(container);
+                    }
+                    if(value.length>0)
+                    {
+                        document.getElementById("containerimg"+i+",0").style.marginLeft = "20%";
+                          
+                    }
+                selection.style.textAlign = "center";
+                    i = i+1;
+            }
+            document.getElementById("demo").style.alignContent = "center";
+            section_containers.push(containers);
             setImagesOnClick();
         }
     </script>
@@ -695,35 +1070,78 @@
             {
                 margin-left: 15px;
             }
+            .div_poi_general2
+            {
+                margin-bottom: 18%;
+                align-content: center;
+            }
+            #less_then
+            {
+                color: red;
+            }
         </style>
         <p class="demo" id="demo_user"></p>
         <script type="text/javascript">
-    
+
             function displayPhotosPersonal (pointOfInterestArray)
             {
-                pointOfInterestArr=[] // Take that off when needed
-            var arr1 = ["https://ichef.bbci.co.uk/news/660/cpsprodpb/83C0/production/_104182733_jerusalem.jpg","https://www.touristisrael.com/wp-content/uploads/Tower-of-David.jpg"]
+                 
+            var recommended = ["https://ichef.bbci.co.uk/news/660/cpsprodpb/83C0/production/_104182733_jerusalem.jpg","https://www.touristisrael.com/wp-content/uploads/Tower-of-David.jpg"]
             
-            var arr2 = ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCkWq2--gI5tRB9VFE5S5TENyuMLm5OoAHGUFDxsKtKFd0PbFO","https://www.brookings.edu/wp-content/uploads/2017/12/jerusalem_aerial001-e1512487211181.jpg"]
+            var saved = ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCkWq2--gI5tRB9VFE5S5TENyuMLm5OoAHGUFDxsKtKFd0PbFO","https://www.brookings.edu/wp-content/uploads/2017/12/jerusalem_aerial001-e1512487211181.jpg"]
             
-            pointOfInterestArr.push(arr1)
-            pointOfInterestArr.push(arr2)
             
+            pointOfInterestArray.push(saved);
+            pointOfInterestArray.push(recommended);
             var x="";
-            var categoryArr;
-                x = x+ "<h1>Saved point of interest </h1>"
-                for(var j=0; j<pointOfInterestArr[0].length;j++)
+            x = x +"<div id=\"div_imgp"+0+"\" class=\"div_poi_general2\">";// class=\"div_poi_general\">";
+            x = x+ "<h1>Saved point of interest </h1>"
+            if(pointOfInterestArray[0].length<2)
+            {
+                x= x+"<h1 id=\"less_then\">There are less than <b>two</b> saved pictures</h1>";
+            }    
+            x= x + "<br/>"
+            x = x+"</div>";
+            x = x +"<div id=\"div_imgp"+1+"\" class=\"div_poi_general2\">";
+            x = x+ "<h1>Recommended point of interest </h1>";
+         
+            x= x + "<br/>"
+            x = x+"</div>";
+            document.getElementById("demo_user").innerHTML = x;
+            var containers = [];
+            var selection = document.getElementById("div_imgp0");
+            if(pointOfInterestArray[0].length>=2)
+            {
+
+            
+
+                for(var j=0; j<pointOfInterestArray[0].length;j++)
                 {
-                    x = x + "<img id=\"imgp"+0+","+j+"\" src=\'"+pointOfInterestArr[0][j]+"\' width=\"300\" height=\"300\" class=\"personal_image\">" 
+                    var container = addCustomImage(pointOfInterestArray[0][j],300,300,selection,"imgp"+0+","+j);
+                    container.classList.add("personal_image");
+                    container.style.cssFloat = "left";
+                    containers.push(container);
                 }
-                x= x + "<br/>"
-                x = x+ "<h1>Recommended point of interest </h1>"
-                for(var j=0; j<pointOfInterestArr[1].length;j++)
+                document.getElementById("containerimgp"+0+",0").style.marginLeft = "20%";
+            }
+                
+                selection = document.getElementById("div_imgp1");
+                
+                
+                    for(var j=0; j<pointOfInterestArray[1].length;j++)
+                    {
+                        var container = addCustomImage(pointOfInterestArray[1][j],300,300,selection,"imgp"+1+","+j);
+                        container.classList.add("personal_image");
+                        container.style.cssFloat = "left";
+                        containers.push(container);
+                    }
+                    
+                    if(pointOfInterestArray[1].length>0)
                 {
-                    x = x + "<img id=\"imgp"+1+","+j+"\" src=\'"+pointOfInterestArr[1][j]+"\' width=\"300\" height=\"300\" class=\"personal_image\">" 
+                    document.getElementById("containerimgp"+1+",0").style.marginLeft = "20%";
                 }
-    
-                document.getElementById("demo_user").innerHTML = x;
+             
+               section_containers.push(containers);
                 setImagesOnClick();
             }
         </script>
@@ -762,11 +1180,72 @@
     <h1 id="about_content">Jerusalem is totally unique – there is no other place like it. A city of tradition, religion, 
         and history, but also, increasingly, of modern culture and heritage, it is a city with so much
         to offer that you could spend years here and still not see everything</h1>
-        <img src="source/about1.jpeg" width="600" height="500" id="about_img1">
-        <img src="source/about2.jpeg" width="600" height="500" id="about_img2">
+        <div id="about_images_part1">
+        
+        
+        </div>
         <br/>
-        <img src="source/about3.jpeg" width="600" height="500" id="about_img3">
-        <img src="source/about4.jpeg" width="600" height="500" id="about_img4">
+        <div id="about_images_part2">
+        
+        </div>
+
+        <script type="text/javascript">
+            
+            function addAboutPhotos()
+                {
+                    var selection1 = document.getElementById("about_images_part1");
+                    var about_containers = [];
+                    var container1 = addCustomImage("source/about1.jpeg",600,500,selection1,"about_img1");
+                    var container2 = addCustomImage("source/about2.jpeg",600,500,selection1,"about_img2");
+                    var selection2 = document.getElementById("about_images_part2");
+                    var container3 = addCustomImage("source/about3.jpeg",600,500,selection2,"about_img3");
+                    var container4 = addCustomImage("source/about4.jpeg",600,500,selection2,"about_img4");
+                    about_containers.push(container1);
+                    about_containers.push(container2);
+                    about_containers.push(container3);
+                    about_containers.push(container4);
+                    
+                    section_containers.push(about_containers);
+                    //container1.style.marginLeft = "31.75%";
+                    container1.style.cssFloat = "left";
+                    container1.style.marginLeft = "13%";
+
+                    container2.style.cssFloat = "left";
+                    container2.style.marginLeft = "5%";
+
+                    container3.style.cssFloat = "left";
+                    container3.style.marginLeft = "13%";
+                    container3.style.marginTop = "5%";
+
+                    container4.style.cssFloat = "left";
+                    container4.style.marginLeft = "5%";
+                    container4.style.marginTop = "5%";
+                    
+                    /*
+                        #about_img1
+        {
+            margin-left: 17%;
+            
+        }
+        #about_img2
+        {
+            margin-left: 5%;
+            
+        }
+        #about_img3
+        {
+            margin-left: 17%;
+            margin-top: 5%;
+        }
+        #about_img4
+        {
+            margin-left: 5%;
+            margin-top: 5%;
+        }
+                    */
+                    setImagesOnClick();
+                }
+        </script>
 </section>
 <section id="restorePassword">
 <style>
@@ -796,16 +1275,18 @@
         <br/>
         <br/>
 
-        <input class="btn" type="submit" id="submit_restore_btn" value="Submit" >
+       <input class="btn" type="submit" id="submit_restore_btn" value="Submit" >
 
 
 
     </div>
     <script type="text/javascript">
+    
         function validateAnswer(givenAnswer , correctAnswer)
         {
             return givenAnswer === correctAnswer;
         }
+    
     </script>
 </section>
 <!--
